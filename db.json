@@ -1,0 +1,28 @@
+{
+  "clientes": [
+    {
+      "nombre": "Julian",
+      "empresa": "Udemy",
+      "email": "algoaca@gmail.com",
+      "telefono": "23144313",
+      "notas": "Un cliente muy capo",
+      "id": 1
+    },
+    {
+      "nombre": "Julian",
+      "empresa": "Udemy",
+      "email": "algoaca@gmail.com",
+      "telefono": "23144313",
+      "notas": "Un cliente muy capo",
+      "id": 2
+    },
+    {
+      "nombre": "Prueba",
+      "empresa": "Empresa",
+      "email": "algo@gmail.com",
+      "telefono": "203030303",
+      "notas": "",
+      "id": 4
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+###Herramientas utilizadas: react-vite - Tailwind - React-router - Formik - Yup - JSON-Server
+
+Inicializo el proyecto con vite
+
+npm install -D tailwindcss postcss autoprefixer // Instalo tailwind
+
+npx tailwindcss init -p // Creo los archivos de configuracion y en tailwind.config le digo que archivos lo van a utilizar (carpeta components)
+
+Este proyecto utiliza react router, por lo tanto lo instalo: npm react-router-dom
+
+Declaro las rutas principales, y cuando quiero tener contenido que se repita en general, anido el componente Route, y en el principal importo Outlet
+
+En una ruta, puedo declarar "/:id" para indicar que es un endpoint
+
+Con el hook useLocation puedo obtener informacion de la url:
+const location = useLocation(); (Despues de haber importado el hook desde react-router-dom)
+De aqui obtengo el pathname, el hash "clientes#20" y un query por ejemplo "/algo?id=20"
+
+Empiezo a darle estilos con tailwind, y a pesar de saber validar formularios vamos a probar con una libreria.
+Si tu proyecto va a contar con formularios muy grandes o complejos, vale la pena utilizar una libreria que solucione casi todos los problemas. Las mas populares son:
+-Formik / Utiliza Yup como herramienta de validacion
+-React Hook Form / Cuenta con validacion
+Voy a utilizar Formik y Yup: "npm i formik yup"
+
+En principio Formik es lo mismo que un formulario, importamos Formik, importamos Form, importamos Field (Aunque Field es lo mismo que input, tenemos que anidarlo en un div que viene a ser un campo y poner tambien un label)
+
+Ahora se viene la validacion y el state de Formik, el state seria:
+<Formik
+onSubmit={(values) => {
+console.log("enviando formulario")
+}}
+initialValues={{
+        nombre: "",
+        campos...
+    }}
+
+> En vez de usar un state para cada campo o uno general, los declaramos como un objeto en initialValues. La llave es el atributo name.
+
+La validacion la haremos con Yup, que tiene un monton de metodos para validar campos, empezamos:
+import \* as Yup from "yup"
+
+Para eso primero creamos un schema, que vendria siendo un objeto/modelo con los datos a validar:
+const NuevoClienteSchema = Yup.object().shape({
+    nombre: Yup.string().required('El nombre del cliente es obligatorio'),
+    otros...
+});
+Y lo agregamos a Formik:
+<Formik
+    validationSchema={NuevoClienteSchema}
+>
+
+Extraigo los errores dentro de Formik, y tambien importo un componente llamado <ErrorMessage name=''>, esta bueno hacerlo asi pero no se le pueden agregar estilos, por lo tanto solo usaremos el objeto de errores, se lo pasamos a un componente y ya esta, le damos los estilos que queramos
+
+
+Ahora para simular una base de datos instalamos json-server, para ejecutarlo simplemente mandamos el siguiente comando:
+json-server --watch db.json --port 4000 // Donde db.json es la "base de datos" que creamos y el puerto es 4000
+
+Agregamos el cliente mediante una peticion post, y extraemos la funcion {resetForm} del submit para resetear el formulario, ademas, vamos a redireccionar al usuario cuando se termine de crear el registro, por lo tanto vamos a usar otro hook de react-router:
+const navigate = useNavigate();
+
+Despues de esto creamos la tabla donde vamos a visualizar los clientes. Esto es facil, mediante un get obtenemos todos los clientes, creamos la cabecera de la tabla y a partir de ahi, simplemente aplicamos un map sobre el estado "clientes" (sin olvidarnos de pasarle la key al componente Cliente). De ahi seguimos creando la tabla, con sus respectivos botones de acciones.
+
+Luego de crear los botones de acciones toca crear una nueva ruta y un nuevo componente, y navegaremos a este cuando el usuario toque el boton "Ver Cliente", con navigate() y pasando la id de ese cliente.
+
+Desde el componente "VerCliente", vamos a utilizar otro hook muy util de react router llamado "useParams", este sirve para leer la informacion de la url. Entonces extraemos el id desde useParams y lo utilizamos para hacer la consulta a la api.
+
+Terminamos el componente de ver cliente, con una pantalla de carga para que no parpadee y un ternario verificando si de hecho el dato existe.
+
+En el componente EditarCliente, en Formik usamos el prop enableReinitialize={true}, para usar el cliente que ya tenemos y autocompletar los datos. Para que no choque con el componente NuevoCliente, cuando al Formulario no le pasamos un cliente por defecto, asignamos defaultProps a Formulario.
+
+Para verificar si un objeto tiene un campo podemos usar este ternario:
+_objeto?.campo ?? "Si no tiene nada pone esto"
+_objeto?.campo ? "Si existe ponemos esto" : "Si no existe no ponemos esto"
+
+Con eso listo, modificamos el formulario para que tambien sepa si esta cargando, y el handleEliminar lo hacemos desde inicio, mandamos la peticion DELETE y lo eliminamos del dom.
+Con eso listo solo resta subirlo a github, y cambiar a donde apuntan las peticiones, en vez de localhost vamos a utilizar my-json-server para subir la pagina.
