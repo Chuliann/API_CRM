@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from 'react'
 import Cliente from "../components/Cliente"
+import Confirmar from "../components/Confirmar"
 
 const Inicio = () => {
 
   const [clientes, setClientes] = useState([]);
+  const [confirmar, setConfirmar] = useState(false);
+  const [borrar, setBorrar] = useState(false);
 
   const handleEliminar = async id => {
-    const confirmar = confirm("Deseas eliminar a este cliente?");
+    setConfirmar(true);
 
-    if(confirmar) {
-
+    if (borrar) {
+      setConfirmar(false);
       try {
-        const url = `http://localhost:4000/clientes/${id}`;
+        const url = `${import.meta.env.VITE_API_URL}/${id}`;
         const respuesta = await fetch(url, {
           method: "DELETE"
         })
@@ -25,7 +28,7 @@ const Inicio = () => {
         console.log(error);
       }
 
-    } 
+    }
   }
 
 
@@ -33,7 +36,7 @@ const Inicio = () => {
 
     const obtenerClientesApi = async () => {
       try {
-        const url = 'http://localhost:4000/clientes';
+        const url =import.meta.env.VITE_API_URL;
         const respuesta = await fetch(url);
         const resultado = await respuesta.json();
 
@@ -47,6 +50,7 @@ const Inicio = () => {
 
   return (
     <>
+      {confirmar ? <Confirmar setBorrar={setBorrar} setConfirmar={setConfirmar} confirmar={confirmar} /> : null}
       <h1 className='font-black text-4xl text-blue-900 '>Clientes</h1>
       <p className='mt-3'>Administra tus clientes</p>
 
@@ -61,7 +65,7 @@ const Inicio = () => {
         </thead>
         <tbody>
           {clientes.map(cliente => (
-            <Cliente 
+            <Cliente
               key={cliente.id}
               cliente={cliente}
               handleEliminar={handleEliminar}

@@ -73,4 +73,5 @@ _objeto?.campo ?? "Si no tiene nada pone esto"
 _objeto?.campo ? "Si existe ponemos esto" : "Si no existe no ponemos esto"
 
 Con eso listo, modificamos el formulario para que tambien sepa si esta cargando, y el handleEliminar lo hacemos desde inicio, mandamos la peticion DELETE y lo eliminamos del dom.
-Con eso listo solo resta subirlo a github, y cambiar a donde apuntan las peticiones, en vez de localhost vamos a utilizar my-json-server para subir la pagina.
+Con eso listo solo resta subirlo a github, y cambiar a donde apuntan las peticiones, en vez de localhost vamos a utilizar my-json-server para subir la pagina a internet.
+

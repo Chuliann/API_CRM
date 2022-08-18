@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import Layout from "./layout/Layout"
 import Inicio from "./pages/Inicio"
 import NuevoCliente from "./pages/NuevoCliente"
@@ -8,10 +7,18 @@ import VerCliente from "./pages/VerCliente"
 
 function App() {
 
+
   return (
     <Router>
       <Routes>
-        
+
+
+        <Route path='/'
+          element={
+            <Navigate to="/clientes" replace={true} />
+          }
+        />
+
         {/* Agrupa las rutas */}
         <Route path='/clientes' element={<Layout />}>
           {/* Ruta unica */}
